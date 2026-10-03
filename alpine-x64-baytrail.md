@@ -30,7 +30,7 @@ chroot /mnt /bin/sh
 mount -o ro /dev/sr0 /tmp
 # Copy i386-efi dir we prepeared earlier
 cp -r /tmp/i386-efi /usr/lib/grub
-# Use nano to configure /etc/default/grub for you
+# Use nano to configure /etc/default/grub for you (I'll add vmxnet3 module)
 apk add nano
 nano /etc/default/grub
 # Continue fixing GRUB
@@ -61,46 +61,4 @@ Install newer kernel
 ```sh
 sudo apk add linux-stable
 sudo reboot
-```
-Minimal desktop setup (DWL)
-```sh
-sudo apk add alpine-sdk git pkgconfig \
-  wayland-dev wayland-protocols libinput-dev \
-  libxkbcommon-dev wlroots-dev pixman-dev
-sudo apk add seatd dbus
-sudo rc-update add seatd
-sudo rc-update add dbus
-sudo adduser $USER seat
-sudo adduser $USER video
-sudo adduser $USER input
-sudo setup-devd udev
-```
-Configuring `XDG_RUNTIME_DIR` <br />
-Edit `.profile` (`nano ~/.profile`):
-```
-export LIBSEAT_BACKEND=seatd
-
-if [ -z "$XDG_RUNTIME_DIR" ]; then
-    export XDG_RUNTIME_DIR="/tmp/runtime-$USER"
-    if [ ! -d "$XDG_RUNTIME_DIR" ]; then
-        mkdir -m 700 "$XDG_RUNTIME_DIR"
-    fi
-fi
-```
-```sh
-sudo reboot
-sudo apk add xdg-utils xdg-user-dirs
-xdg-user-dirs-update
-# We will store dwl here
-cd Documents
-git clone https://codeberg.org/dwl/dwl
-cd dwl
-make
-sudo make install
-sudo apk add foot font-dejavu
-```
-Install needed drivers:
-```sh
-# For VMware
-sudo apk add mesa-dri-gallium mesa-egl mesa-gbm xf86-video-vmware
 ```
