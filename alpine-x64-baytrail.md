@@ -73,10 +73,13 @@ sudo rc-update add dbus
 sudo adduser $USER seat
 sudo adduser $USER video
 sudo adduser $USER input
+sudo setup-devd udev
 ```
 Configuring `XDG_RUNTIME_DIR` <br />
 Edit `.profile` (`nano ~/.profile`):
 ```
+export LIBSEAT_BACKEND=seatd
+
 if [ -z "$XDG_RUNTIME_DIR" ]; then
     export XDG_RUNTIME_DIR="/tmp/runtime-$USER"
     if [ ! -d "$XDG_RUNTIME_DIR" ]; then
@@ -95,4 +98,9 @@ cd dwl
 make
 sudo make install
 sudo apk add foot font-dejavu
+```
+Install needed drivers:
+```sh
+# For VMware
+sudo apk add mesa-dri-gallium mesa-egl mesa-gbm xf86-video-vmware
 ```
